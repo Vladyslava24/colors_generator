@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'colors_list.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -31,6 +33,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Color _color = Color(0xFFFFFFFF);
+  List<Color> _colorList = [];
   final Random _random = Random();
 
   void generateRandomColor() {
@@ -42,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _random.nextDouble(),
       );
     });
+    _colorList.add(_color);
   }
 
   @override
@@ -67,6 +71,15 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ColorsList(colors: _colorList)),
+          );
+        },
+        label: Text("Generated colors"),
       ),
     );
   }
