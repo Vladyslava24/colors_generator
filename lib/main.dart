@@ -3,21 +3,22 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'colors_list.dart';
+import 'constants.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Colors Generator',
+      title: HOME_TITLE_TEXT,
       theme: ThemeData(
-        primarySwatch: Colors.purple,
+        primarySwatch: PRIMARY_SWATCH_COLOR,
       ),
-      home: MyHomePage(title: 'Colors Generator'),
+      home: MyHomePage(title: HOME_TITLE_TEXT),
     );
   }
 }
@@ -32,9 +33,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Color _color = Color(0xFFFFFFFF);
+  Color _color = START_COLOR_VALUE;
   List<Color> _colorList = [];
   final Random _random = Random();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: _bodyContent(),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          _navigateToColorsList();
+        },
+        label: Text(ACTION_BUTTON_TEXT),
+      ),
+    );
+  }
 
   void generateRandomColor() {
     setState(() {
@@ -48,39 +65,33 @@ class _MyHomePageState extends State<MyHomePage> {
     _colorList.add(_color);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: InkWell(
-        onTap: generateRandomColor,
-        child: Container(
-          color: _color,
-          child: Align(
-            alignment: Alignment.center,
-            child: Text(
-              'Hey there',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20.0,
-                color: Colors.deepPurple
-              ),
-            ),
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ColorsList(colors: _colorList)),
-          );
-        },
-        label: Text("Generated colors"),
+  Widget _bodyContent(){
+    return InkWell(
+      onTap: generateRandomColor,
+      child: Container(
+        color: _color,
+        child: _textAlign(),
       ),
     );
   }
+
+  Widget _textAlign(){
+    return Align(
+      alignment: Alignment.center,
+      child: Text(
+        CENTER_TEXT,
+        textAlign: TextAlign.center,
+        style: CENTER_TEXT_STYLE,
+      ),
+    );
+  }
+
+  Future _navigateToColorsList(){
+    return Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ColorsList(colors: _colorList)),
+    );
+  }
+
 }
+
